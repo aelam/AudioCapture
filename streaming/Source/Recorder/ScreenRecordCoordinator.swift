@@ -15,11 +15,33 @@ class ScreenRecordCoordinator: NSObject, ScreenRecorderDelegate {
 
     let socket_rtp = RTPClient()
     let aacEncoder = AACEncoder()
+    let aacEncoder2 = AACEncoder2()
+
+//    @property (nonatomic) dispatch_queue_t encoderQueue;
+    let encoderSerialQueue = DispatchQueue(label: "swiftlee.serial.queue")
     
     private(set) var audioAssetPath: String = ""
-
+    public var receiverIP: String = "10.30.28.26" {
+        didSet {
+            socket_rtp.address = receiverIP
+        }
+    }
+    public var receiverPort: String = "10001" {
+        didSet {
+            socket_rtp.port = Int(receiverIP) ?? 10001
+        }
+    }
+    
+    
     override init() {
         super.init()
+
+        aacEncoder2.channelsPerFrame = 1
+        aacEncoder2.delegate = self
+        
+        socket_rtp.address = receiverIP
+        socket_rtp.port = Int(receiverIP) ?? 10001
+
         aacEncoder.delegate = self
         screenRecorder.delegate = self
         viewOverlay.onStopClick = {
@@ -51,7 +73,15 @@ class ScreenRecordCoordinator: NSObject, ScreenRecorderDelegate {
 //        NSData *adtsHeader = [self adtsDataForPacketLength:totalLength];
 //        NSMutableData *fullData = [NSMutableData dataWithData:adtsHeader];
 //        [fullData appendData:rawAAC];
-        aacEncoder.encode(buffer)
+        
+//        DispatchQueue.main.async {
+//            self.aacEncoder.encode(buffer)
+//        }
+        
+        encoderSerialQueue.sync {
+            self.aacEncoder2.startEncode(buffer)
+        }
+        
 //        socket_rtp.publish(<#T##data: Data!##Data!#>, timestamp: <#T##CMTime#>, payloadType: 97)
 
     }
@@ -116,6 +146,13 @@ extension ScreenRecordCoordinator: AACEncoderDelegate {
         }
     }
     
-    
-    
+}
+
+
+extension ScreenRecordCoordinator: AACEncoder2Delegate {
+    func getEncodedAudioData(_ data: Data!, timeStamp: CMTime) {
+        if (data != nil) {
+            socket_rtp.publish(data, timestamp: timeStamp, payloadType: 97)
+        }
+    }
 }

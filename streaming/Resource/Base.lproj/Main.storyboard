@@ -26,13 +26,21 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10.30.28.26" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wNZ-yH-65t">
-                                        <rect key="frame" x="20" y="48" width="228" height="34"/>
+                                        <rect key="frame" x="20" y="48" width="174" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4U-kv-hrE">
+                                        <rect key="frame" x="303" y="48" width="67" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Apply"/>
+                                        <connections>
+                                            <action selector="saveAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dyl-2e-4ai"/>
+                                        </connections>
+                                    </button>
                                     <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="10001" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dcp-hX-lSg">
-                                        <rect key="frame" x="256" y="48" width="94" height="34"/>
+                                        <rect key="frame" x="202" y="48" width="94" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -46,18 +54,18 @@
                                     <constraint firstItem="CpB-SC-9e8" firstAttribute="top" secondItem="IcH-Oh-tMW" secondAttribute="top" id="zlK-J0-Jae"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IEg-bU-Fs6">
-                                <rect key="frame" x="152" y="178" width="110" height="30"/>
-                                <state key="normal" title="Play sound first!"/>
-                                <connections>
-                                    <action selector="playSound:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N0P-jx-Ft7"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R0h-5G-9O9">
                                 <rect key="frame" x="99.5" y="399" width="215" height="30"/>
                                 <state key="normal" title="Tap here to start app streaming"/>
                                 <connections>
                                     <action selector="startbtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GYq-hs-ar9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IEg-bU-Fs6">
+                                <rect key="frame" x="152" y="178" width="110" height="30"/>
+                                <state key="normal" title="Play sound first!"/>
+                                <connections>
+                                    <action selector="playSound:" destination="BYZ-38-t0r" eventType="touchUpInside" id="N0P-jx-Ft7"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -74,12 +82,14 @@
                         <viewLayoutGuide key="safeArea" id="08K-5u-psD"/>
                     </view>
                     <connections>
+                        <outlet property="receiverIPField" destination="wNZ-yH-65t" id="Hux-hz-0DK"/>
+                        <outlet property="receiverPortField" destination="dcp-hX-lSg" id="cOo-tt-8rJ"/>
                         <outlet property="recordButton" destination="R0h-5G-9O9" id="7WN-JN-aGK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="95" y="116.00000000000001"/>
+            <point key="canvasLocation" x="94.20289855072464" y="115.84821428571428"/>
         </scene>
     </scenes>
 </document>

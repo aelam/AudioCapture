@@ -12,6 +12,7 @@
 		B7E67D0C24A9E7D300E192C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7E67D0A24A9E7D300E192C8 /* Main.storyboard */; };
 		B7E67D0E24A9E7D500E192C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7E67D0D24A9E7D500E192C8 /* Assets.xcassets */; };
 		B7E67D1124A9E7D500E192C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7E67D0F24A9E7D500E192C8 /* LaunchScreen.storyboard */; };
+		FA32F52924B724C500435A5B /* AACEncoder2.m in Sources */ = {isa = PBXBuildFile; fileRef = FA32F52724B724C500435A5B /* AACEncoder2.m */; };
 		FA4B087624B6ED0900EFDBD7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = FA4B087524B6ED0900EFDBD7 /* README.md */; };
 		FA4B087824B6EE0800EFDBD7 /* 10001acc.sdp in Resources */ = {isa = PBXBuildFile; fileRef = FA4B087724B6EE0800EFDBD7 /* 10001acc.sdp */; };
 		FA4B088F24B6F05700EFDBD7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4B087B24B6F05700EFDBD7 /* ViewController.swift */; };
@@ -37,6 +38,8 @@
 		B7E67D1024A9E7D500E192C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B7E67D1224A9E7D500E192C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B7E67D1824A9E8F100E192C8 /* streaming-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "streaming-Bridging-Header.h"; sourceTree = "<group>"; };
+		FA32F52724B724C500435A5B /* AACEncoder2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AACEncoder2.m; sourceTree = "<group>"; };
+		FA32F52824B724C500435A5B /* AACEncoder2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AACEncoder2.h; sourceTree = "<group>"; };
 		FA4B087524B6ED0900EFDBD7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FA4B087724B6EE0800EFDBD7 /* 10001acc.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10001acc.sdp; sourceTree = "<group>"; };
 		FA4B087B24B6F05700EFDBD7 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +150,8 @@
 		FA4B087D24B6F05700EFDBD7 /* Codec */ = {
 			isa = PBXGroup;
 			children = (
+				FA32F52824B724C500435A5B /* AACEncoder2.h */,
+				FA32F52724B724C500435A5B /* AACEncoder2.m */,
 				FA4B087E24B6F05700EFDBD7 /* AACEncoder.h */,
 				FA4B087F24B6F05700EFDBD7 /* AACEncoder.m */,
 			);
@@ -316,6 +321,7 @@
 			files = (
 				FA4B088F24B6F05700EFDBD7 /* ViewController.swift in Sources */,
 				FA4B089024B6F05700EFDBD7 /* AACEncoder.m in Sources */,
+				FA32F52924B724C500435A5B /* AACEncoder2.m in Sources */,
 				FA4B089224B6F05700EFDBD7 /* StreamFFp.m in Sources */,
 				B7E67D0524A9E7D300E192C8 /* AppDelegate.swift in Sources */,
 				FA4B089124B6F05700EFDBD7 /* RTPClient.m in Sources */,

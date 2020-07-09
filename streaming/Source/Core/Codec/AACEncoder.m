@@ -138,8 +138,10 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
 
 - (void) encode:(CMSampleBufferRef)sampleBuffer {
     CFRetain(sampleBuffer);
-    CMTime timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    dispatch_async(_encoderQueue, ^{
+
+//    dispatch_async(_encoderQueue, ^{
+        CMTime timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+
         if (!_audioConverter) {
             [self setupEncoderFromSampleBuffer:sampleBuffer];
         }
@@ -152,7 +154,7 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
         }
         //NSLog(@"PCM Buffer Size: %zu", _pcmBufferSize);
         
-        memset(_aacBuffer, 0, _aacBufferSize);
+        memset(self->_aacBuffer, 0, _aacBufferSize);
         AudioBufferList outAudioBufferList = {0};
         outAudioBufferList.mNumberBuffers = 1;
         outAudioBufferList.mBuffers[0].mNumberChannels = 1;
@@ -160,7 +162,8 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
         outAudioBufferList.mBuffers[0].mData = _aacBuffer;
         AudioStreamPacketDescription *outPacketDescription = NULL;
         UInt32 ioOutputDataPacketSize = 1;
-        status = AudioConverterFillComplexBuffer(_audioConverter, inInputDataProc, (__bridge void *)(self), &ioOutputDataPacketSize, &outAudioBufferList, outPacketDescription);
+//        NSLog(@"_audioConverter: %@, self: %@", _audioConverter, self);
+        status = AudioConverterFillComplexBuffer(_audioConverter, inInputDataProc, (__bridge void *)self, &ioOutputDataPacketSize, &outAudioBufferList, outPacketDescription);
         //NSLog(@"ioOutputDataPacketSize: %d", (unsigned int)ioOutputDataPacketSize);
         NSData *data = nil;
         if (status == 0) {
@@ -173,16 +176,18 @@ static OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNu
             error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
         }
         if (self.delegate != nil) {
-            dispatch_async(_callbackQueue, ^{
+            dispatch_async(self->_callbackQueue, ^{
                 [self.delegate gotAACEncodedData:data timestamp:timestamp error:error];
             });
         }
         CFRelease(sampleBuffer);
         CFRelease(blockBuffer);
-    });
+//    });
 }
 
+- (void)_encode:(CMSampleBufferRef)sampleBuffer {
 
+}
 
 /**
  *  Add ADTS header at the beginning of each and every AAC packet.

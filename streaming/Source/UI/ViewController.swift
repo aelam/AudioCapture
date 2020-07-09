@@ -13,6 +13,9 @@ import AVFoundation
 class ViewController: UIViewController {
 
     @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var receiverIPField: UITextField!
+    @IBOutlet weak var receiverPortField: UITextField!
+    @IBOutlet weak var saveButton: UIButton!
 
     //let streamer = StreamFFp()
     var player: AVAudioPlayer?
@@ -21,7 +24,19 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-
+   
+    
+    
+    @IBAction func saveAction(_ sender: Any) {
+        UserDefaults.standard.set(receiverIPField, forKey: "receiverIPField")
+        UserDefaults.standard.set(receiverPortField, forKey: "receiverPortField")
+        UserDefaults.standard.synchronize()
+        
+        screenRecord.receiverIP = receiverIPField.text ?? "10.30.28.26"
+        screenRecord.receiverPort = receiverPortField.text ?? "10001"
+        
+    }
+    
     @IBAction func playSound(_ sender: Any) {
 
         guard let url = Bundle.main.url(forResource: "soundName", withExtension: "mp3") else {

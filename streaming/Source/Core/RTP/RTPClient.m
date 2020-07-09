@@ -97,7 +97,7 @@ struct rtpheader RTPheader;
         foo->b.m = 0;
         foo->b.pt = 97;  // AAC   /* MPEG Audio */
         foo->b.sequence = t - start_t; //rand() & 65535;
-        foo->timestamp = t - start_t;
+        foo->timestamp = t;
         foo->ssrc = ssrc;
         foo->iAudioHeader = 0;
         

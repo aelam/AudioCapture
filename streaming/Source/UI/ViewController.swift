@@ -23,13 +23,28 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
+        
     }
    
+    func loadData() {
+        if let ip = UserDefaults.standard.string(forKey: "receiverIPField") {
+            receiverIPField.text = ip
+            screenRecord.receiverIP = ip
+        }
+
+        if let port = UserDefaults.standard.string(forKey: "receiverPortField") {
+            receiverPortField.text = port
+            screenRecord.receiverPort = receiverPortField.text ?? "10001"
+        }
+    }
     
     
     @IBAction func saveAction(_ sender: Any) {
-        UserDefaults.standard.set(receiverIPField, forKey: "receiverIPField")
-        UserDefaults.standard.set(receiverPortField, forKey: "receiverPortField")
+        self.view.endEditing(true)
+        
+        UserDefaults.standard.set(receiverIPField.text ?? "", forKey: "receiverIPField")
+        UserDefaults.standard.set(receiverPortField.text ?? "", forKey: "receiverPortField")
         UserDefaults.standard.synchronize()
         
         screenRecord.receiverIP = receiverIPField.text ?? "10.30.28.26"
@@ -80,15 +95,6 @@ class ViewController: UIViewController {
     @IBAction func stopButtonTapped(_ sender: Any) {
         screenRecord.stopRecording()
     }
-
-    @IBAction func startSinAudioServerButton(_ sender: Any) {
-        screenRecord.startSinAudioBroadcastServer()
-    }
-
-    @IBAction func stopSinAudioServerButton(_ sender: Any) {
-        screenRecord.stopSinAudioBroadcastServer()
-    }
-
 
 }
 

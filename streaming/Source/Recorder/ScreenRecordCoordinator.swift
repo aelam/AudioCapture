@@ -61,34 +61,21 @@ class ScreenRecordCoordinator: NSObject, ScreenRecorderDelegate {
     }
     
     func recorder(recorder: ScreenRecorder, didGetAudioBuffer buffer: CMSampleBuffer) {
-//        print("audioAssetPath size ", getSizeOfFile(withPath: audioAssetPath))
-        
-//        let dataBuffer = CMSampleBufferGetDataBuffer(buffer)
-//
-//        CMBlockBufferRef dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
-//        size_t length, totalLength;
-//        char *dataPointer;
-//        CMBlockBufferGetDataPointer(dataBuffer, 0, &length, &totalLength, &dataPointer);
-//        NSData *rawAAC = [NSData dataWithBytes:dataPointer length:totalLength];
-//        NSData *adtsHeader = [self adtsDataForPacketLength:totalLength];
-//        NSMutableData *fullData = [NSMutableData dataWithData:adtsHeader];
-//        [fullData appendData:rawAAC];
-        
 //        DispatchQueue.main.async {
 //            self.aacEncoder.encode(buffer)
 //        }
+//        self.aacEncoder.encode(buffer)
         
+        // 2
         encoderSerialQueue.sync {
             self.aacEncoder2.startEncode(buffer)
         }
-        
-//        socket_rtp.publish(<#T##data: Data!##Data!#>, timestamp: <#T##CMTime#>, payloadType: 97)
-
     }
 
 
     func stopRecording() {
-        
+        socket_rtp.reset()
+
         screenRecorder.stopRecording { (error) in
             self.viewOverlay.hide()
             self.recordCompleted?(error)
@@ -98,44 +85,6 @@ class ScreenRecordCoordinator: NSObject, ScreenRecorderDelegate {
     class func listAllReplays() -> Array<URL> {
         return ReplayFileUtil.fetchAllReplays()
     }
-
-    
-    func getSizeOfFile(withPath path:String) -> UInt64
-    {
-        var totalSpace : UInt64 = 0
-        
-        var dict : [FileAttributeKey : Any]?
-
-        do {
-            dict = try FileManager.default.attributesOfItem(atPath: path)
-        } catch let error as NSError {
-             print(error.localizedDescription)
-        }
-
-        if dict != nil {
-            let fileSystemSizeInBytes = dict![FileAttributeKey.size] as! NSNumber
-
-            totalSpace = fileSystemSizeInBytes.uint64Value
-            return totalSpace
-        }
-        
-        return 0
-    }
-    
-    func startAudioBroadcastServer() {
-    }
-
-    
-    func startSinAudioBroadcastServer() {
-
-    }
-    
-    func stopSinAudioBroadcastServer() {
-
-    }
-
-    
-
 }
 
 

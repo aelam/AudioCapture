@@ -32,11 +32,11 @@ class ScreenRecorder: NSObject, RPScreenRecorderDelegate {
     //MARK: Screen Recording
     func startRecording(audioAssetPath: String, recordingHandler: @escaping (Error?) -> Void) {
         if #available(iOS 11.0, *) {
-
+            
             // Setup Recording File
             setupAudioSettings(audioAssetPath: audioAssetPath)
-            RPScreenRecorder.shared().delegate = self
-
+//            RPScreenRecorder.shared().delegate = self
+//            RPScreenRecorder.shared().isMicrophoneEnabled = true
             RPScreenRecorder.shared().startCapture(handler: { (sample, bufferType, error) in
                 //print(sample, bufferType)
 
@@ -76,11 +76,12 @@ class ScreenRecorder: NSObject, RPScreenRecorderDelegate {
                     }
 
                     else if (bufferType == .audioMic) {
-//                        if self.audioInput?.isReadyForMoreMediaData {
-//                            self.audioInput.append(sample)
+//                        if self.audioInput?.isReadyForMoreMediaData ?? false {
+//                            self.audioInput?.append(sample)
 //                            // HERE WE SEND THE SAMPLE BUFFER TO STREAMING
 //                            //self.streamer.didOutputSampleBuffer(sample)
 //                        }
+//                        self.delegate?.recorder?(recorder: self, didGetAudioBuffer: sample)
                     }
 
                 }

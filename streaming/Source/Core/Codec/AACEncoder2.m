@@ -8,6 +8,29 @@
 
 #import "AACEncoder2.h"
 
+
+NSData *ADTSDataWithPacketLength(NSInteger packetLength) {
+    
+    int adtsLength = 7;
+    char *packet = malloc(sizeof(char) * adtsLength);
+    // Variables Recycled by addADTStoPacket
+    int profile = 2;  //AAC LC
+    //39=MediaCodecInfo.CodecProfileLevel.AACObjectELD;
+    int freqIdx = 4;  //44.1KHz
+    int chanCfg = 1;  //MPEG-4 Audio Channel Configuration. 1 Channel front-center
+    NSUInteger fullLength = adtsLength + packetLength;
+    // fill in ADTS data
+    packet[0] = (char)0xFF; // 11111111     = syncword
+    packet[1] = (char)0xF9; // 1111 1 00 1  = syncword MPEG-2 Layer CRC
+    packet[2] = (char)(((profile-1)<<6) + (freqIdx<<2) +(chanCfg>>2));
+    packet[3] = (char)(((chanCfg&3)<<6) + (fullLength>>11));
+    packet[4] = (char)((fullLength&0x7FF) >> 3);
+    packet[5] = (char)(((fullLength&7)<<5) + 0x1F);
+    packet[6] = (char)0xFC;
+    NSData *data = [NSData dataWithBytesNoCopy:packet length:adtsLength freeWhenDone:YES];
+    return data;
+}
+
 @interface AACEncoder2 ()
 
 @property (nonatomic, assign) AudioConverterRef audioConverter;
@@ -27,10 +50,14 @@
         
         if ([self encoderAAC:sampleBuffer aacData:aacData aacLen:&aacLen] == YES)
         {
-            NSData *data = [NSData dataWithBytes:aacData length:aacLen];
+            NSData *rawAAC = [NSData dataWithBytes:aacData length:aacLen];
+            NSData *adtsHeader = ADTSDataWithPacketLength(aacLen);
+            NSMutableData *fullData = [NSMutableData dataWithData:adtsHeader];
+            [fullData appendData:rawAAC];
+            
             if (self.delegate && [self.delegate respondsToSelector:@selector(getEncodedAudioData:timeStamp:)])
             {
-                [self.delegate getEncodedAudioData:data timeStamp:timestamp];
+                [self.delegate getEncodedAudioData:fullData timeStamp:timestamp];
             }
         }
 //        CFRelease(sampleBuffer);
@@ -58,9 +85,25 @@
     outputFormat.mChannelsPerFrame = self.channelsPerFrame; // 1:单声道；2:立体声
     outputFormat.mFramesPerPacket = 1024; // 每个Packet的帧数量, AAC一帧是1024个字节
 
+    //3.编码器参数
+    const OSType subtype = kAudioFormatMPEG4AAC;
+    AudioClassDescription requestedCodecs[2] = {
+        {
+            kAudioEncoderComponentType,
+            subtype,
+            kAppleSoftwareAudioCodecManufacturer
+        },
+        {
+            kAudioEncoderComponentType,
+            subtype,
+            kAppleHardwareAudioCodecManufacturer
+        }
+    };
+
+    
     // 硬编码
-    AudioClassDescription *desc = [self getAudioClassDescriptionWithType:kAudioFormatMPEG4AAC fromManufacturer:kAppleHardwareAudioCodecManufacturer];
-    OSStatus result = AudioConverterNewSpecific(&inputFormat, &outputFormat, 1, desc, &_audioConverter);
+//    AudioClassDescription *desc = [self getAudioClassDescriptionWithType:kAudioFormatMPEG4AAC fromManufacturer:kAppleHardwareAudioCodecManufacturer];
+    OSStatus result = AudioConverterNewSpecific(&inputFormat, &outputFormat, 2, requestedCodecs, &_audioConverter);
     if (result != noErr)
     {
         NSLog(@"AudioConverterNewSpecific failed %@", @(result));
@@ -170,6 +213,7 @@
 static OSStatus inputDataProc2(AudioConverterRef inConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
 {
     //AudioConverterFillComplexBuffer 编码过程中，会要求这个函数来填充输入数据，也就是原始PCM数据
+
     AudioBufferList inBufferList = *(AudioBufferList *)inUserData;
     ioData->mBuffers[0].mNumberChannels = 1;
     ioData->mBuffers[0].mData = inBufferList.mBuffers[0].mData;
@@ -179,3 +223,5 @@ static OSStatus inputDataProc2(AudioConverterRef inConverter, UInt32 *ioNumberDa
 }
 
 @end
+
+
